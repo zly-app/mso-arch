@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect width="960" height="640" fill="#ffffff"/>
+
+  <!-- 应用壳层 -->
+  <rect x="60" y="28" width="840" height="92" rx="12" fill="#eef2fb" stroke="#5b8def" stroke-width="1.5"/>
+  <text x="76" y="52" font-size="14" font-weight="bold" fill="#33415e">应用壳层（装配体 · 不含业务规则）</text>
+  <g>
+    <rect x="76" y="64" width="190" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="171" y="89" font-size="13" text-anchor="middle" fill="#33415e">Web 壳</text>
+    <rect x="280" y="64" width="190" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="375" y="89" font-size="13" text-anchor="middle" fill="#33415e">桌面壳</text>
+    <rect x="484" y="64" width="190" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="579" y="89" font-size="13" text-anchor="middle" fill="#33415e">CLI 壳</text>
+    <rect x="688" y="64" width="196" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="786" y="89" font-size="13" text-anchor="middle" fill="#33415e">组合根（port 装配）</text>
+  </g>
+
+  <line x1="480" y1="120" x2="480" y2="136" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="494" y="132" font-size="11" fill="#6b7280">装配</text>
+
+  <!-- 接口层 -->
+  <rect x="60" y="138" width="840" height="60" rx="10" fill="#e8eef7" stroke="#9aa9c7"/>
+  <text x="76" y="163" font-size="14" font-weight="bold" fill="#33415e">① 接口层 — 协议适配</text>
+  <text x="76" y="184" font-size="12" fill="#5b6478">HTTP · RPC · CLI · 前端视图　｜　禁止：业务规则</text>
+
+  <line x1="480" y1="198" x2="480" y2="214" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- 业务层 -->
+  <rect x="60" y="216" width="840" height="60" rx="10" fill="#e6f2ee" stroke="#3fb98f"/>
+  <text x="76" y="241" font-size="14" font-weight="bold" fill="#1f5c49">② 业务层 — 用例编排</text>
+  <text x="76" y="262" font-size="12" fill="#41695c">调度模型完成业务动作　｜　禁止：藏规则（判定规则必须归属某个模型）</text>
+
+  <line x1="480" y1="276" x2="480" y2="292" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- 模型层 -->
+  <rect x="60" y="294" width="840" height="206" rx="10" fill="#efeaf8" stroke="#c06fd8"/>
+  <text x="76" y="318" font-size="14" font-weight="bold" fill="#5b3a78">③ 模型层 — 数据与规则的所有者（自组织）</text>
+  <g>
+    <rect x="76" y="334" width="250" height="48" rx="10" fill="#ffffff" stroke="#c06fd8"/>
+    <text x="201" y="353" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#5b3a78">订单聚合</text>
+    <text x="201" y="372" font-size="11" text-anchor="middle" fill="#7a6b8f">订单 · 价格 · 库存</text>
+    <rect x="346" y="334" width="250" height="48" rx="10" fill="#ffffff" stroke="#c06fd8"/>
+    <text x="471" y="353" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#5b3a78">用户聚合</text>
+    <text x="471" y="372" font-size="11" text-anchor="middle" fill="#7a6b8f">账号 · 会话 · 权限</text>
+    <rect x="616" y="334" width="268" height="48" rx="10" fill="#ffffff" stroke="#c06fd8"/>
+    <text x="750" y="353" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#5b3a78">内容聚合</text>
+    <text x="750" y="372" font-size="11" text-anchor="middle" fill="#7a6b8f">文章 · 评论</text>
+    <rect x="76" y="396" width="250" height="48" rx="10" fill="#fdf6e3" stroke="#f5c542"/>
+    <text x="201" y="415" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#8a6d1a">共享模型</text>
+    <text x="201" y="434" font-size="11" text-anchor="middle" fill="#a58a3a">ID 生成 · 审计记录 · 全局通知</text>
+  </g>
+  <text x="352" y="422" font-size="11.5" fill="#5b6478">树形组合 + 横向调用：只走窄接口，</text>
+  <text x="352" y="438" font-size="11.5" fill="#5b6478">数据谁拥有谁写；环允许（须有终止保障）</text>
+  <text x="76" y="472" font-size="11.5" fill="#7a6b8f">模型判据：能用一句话说清「我拥有什么数据、提供什么操作」；聚合是自然组合，不是硬性层级</text>
+
+  <line x1="480" y1="500" x2="480" y2="516" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- 底座 -->
+  <rect x="60" y="518" width="840" height="60" rx="10" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text x="76" y="543" font-size="14" font-weight="bold" fill="#3f4756">底座 — 无业务语义（被上层单向依赖）</text>
+  <text x="76" y="564" font-size="12" fill="#5b6478">存储 · 配置 · 日志 · 序列化 · 通用工具</text>
+
+  <text x="480" y="608" font-size="13" text-anchor="middle" fill="#33415e" font-weight="bold">依赖方向永远向下：应用壳 → ① 接口层 → ② 业务层 → ③ 模型层 → 底座</text>
+</svg>

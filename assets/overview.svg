@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect width="960" height="640" fill="#ffffff"/>
+
+  <!-- Application Shell -->
+  <rect x="60" y="28" width="840" height="92" rx="12" fill="#eef2fb" stroke="#5b8def" stroke-width="1.5"/>
+  <text x="76" y="52" font-size="14" font-weight="bold" fill="#33415e">Application Shell (assembly · no business rules)</text>
+  <g>
+    <rect x="76" y="64" width="190" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="171" y="89" font-size="13" text-anchor="middle" fill="#33415e">Web shell</text>
+    <rect x="280" y="64" width="190" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="375" y="89" font-size="13" text-anchor="middle" fill="#33415e">Desktop shell</text>
+    <rect x="484" y="64" width="190" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="579" y="89" font-size="13" text-anchor="middle" fill="#33415e">CLI shell</text>
+    <rect x="688" y="64" width="196" height="40" rx="18" fill="#ffffff" stroke="#5b8def"/>
+    <text x="786" y="89" font-size="13" text-anchor="middle" fill="#33415e">Composition root (wires ports)</text>
+  </g>
+
+  <line x1="480" y1="120" x2="480" y2="136" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="494" y="132" font-size="11" fill="#6b7280">assembles</text>
+
+  <!-- Interface layer -->
+  <rect x="60" y="138" width="840" height="60" rx="10" fill="#e8eef7" stroke="#9aa9c7"/>
+  <text x="76" y="163" font-size="14" font-weight="bold" fill="#33415e">① Interface layer — protocol adaptation</text>
+  <text x="76" y="184" font-size="12" fill="#5b6478">HTTP · RPC · CLI · UI views&#160;&#160;|&#160;&#160;Forbidden: business rules</text>
+
+  <line x1="480" y1="198" x2="480" y2="214" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Business layer -->
+  <rect x="60" y="216" width="840" height="60" rx="10" fill="#e6f2ee" stroke="#3fb98f"/>
+  <text x="76" y="241" font-size="14" font-weight="bold" fill="#1f5c49">② Business layer — use-case orchestration</text>
+  <text x="76" y="262" font-size="12" fill="#41695c">Coordinates models to complete actions&#160;&#160;|&#160;&#160;Forbidden: hiding rules (every decision rule must live in a model)</text>
+
+  <line x1="480" y1="276" x2="480" y2="292" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Model layer -->
+  <rect x="60" y="294" width="840" height="206" rx="10" fill="#efeaf8" stroke="#c06fd8"/>
+  <text x="76" y="318" font-size="14" font-weight="bold" fill="#5b3a78">③ Model layer — owner of data &amp; rules (self-organizing)</text>
+  <g>
+    <rect x="76" y="334" width="250" height="48" rx="10" fill="#ffffff" stroke="#c06fd8"/>
+    <text x="201" y="353" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#5b3a78">Order aggregate</text>
+    <text x="201" y="372" font-size="11" text-anchor="middle" fill="#7a6b8f">order · pricing · inventory</text>
+    <rect x="346" y="334" width="250" height="48" rx="10" fill="#ffffff" stroke="#c06fd8"/>
+    <text x="471" y="353" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#5b3a78">User aggregate</text>
+    <text x="471" y="372" font-size="11" text-anchor="middle" fill="#7a6b8f">account · session · permissions</text>
+    <rect x="616" y="334" width="268" height="48" rx="10" fill="#ffffff" stroke="#c06fd8"/>
+    <text x="750" y="353" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#5b3a78">Content aggregate</text>
+    <text x="750" y="372" font-size="11" text-anchor="middle" fill="#7a6b8f">articles · comments</text>
+    <rect x="76" y="396" width="250" height="48" rx="10" fill="#fdf6e3" stroke="#f5c542"/>
+    <text x="201" y="415" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#8a6d1a">Shared models</text>
+    <text x="201" y="434" font-size="11" text-anchor="middle" fill="#a58a3a">ID generation · audit log · notifications</text>
+  </g>
+  <text x="352" y="422" font-size="11.5" fill="#5b6478">Tree composition + lateral calls: narrow interfaces only,</text>
+  <text x="352" y="438" font-size="11.5" fill="#5b6478">data is written by its owner; cycles allowed (must terminate)</text>
+  <text x="76" y="472" font-size="11.5" fill="#7a6b8f">Model test: can you state in one sentence what data it owns and what it provides? Aggregates are natural compositions, not a hard hierarchy</text>
+
+  <line x1="480" y1="500" x2="480" y2="516" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Foundation -->
+  <rect x="60" y="518" width="840" height="60" rx="10" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text x="76" y="543" font-size="14" font-weight="bold" fill="#3f4756">Foundation — no business semantics (depended on unidirectionally from above)</text>
+  <text x="76" y="564" font-size="12" fill="#5b6478">storage · config · logging · serialization · generic utils</text>
+
+  <text x="480" y="608" font-size="13" text-anchor="middle" fill="#33415e" font-weight="bold">Dependencies always point down: shell → ① interface → ② business → ③ model → foundation</text>
+</svg>
