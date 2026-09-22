@@ -86,7 +86,7 @@ sequenceDiagram
     A->>B: reserve stock (budget = 1)
     B->>A: callback: query order status
     A-->>A: budget exhausted → no new calls
-    Note over A,B: Termination: budget / re-entrancy guard / timeout provided by the foundation; state-machine phase is a model-layer design option
+    Note over A,B: Termination — budget / re-entrancy guard / timeout provided by the foundation, state-machine phase is a model-layer design option
 ```
 
 Termination guarantees come from foundation components (budget / re-entrancy guard / timeout) — models must not roll private versions; home-grown mechanisms are unaware of each other and uneven in quality.
