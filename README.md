@@ -150,15 +150,14 @@ Process note: for unstructured legacy (no layering, large flat files), write con
 **Send this to your AI**:
 
 ```text
-Please apply the architecture at https://github.com/zly-app/mso-arch:
-read its AGENTS.md (Model-Self-Organizing Architecture, MSO) and follow
-its rules and review checklist for all design, coding, and reviews in
-my project.
+Please adopt the Model-Self-Organizing Architecture (MSO) from
+https://github.com/zly-app/mso-arch: read its README.md and AGENTS.md,
+then execute the adoption procedure in AGENTS.md ("Adoption & Provenance").
 ```
 
-If your AI cannot access the web: copy `AGENTS.md` into your repository root (most AI coding assistants read it automatically), or paste its full text into the conversation.
+The prompt stays short on purpose — the full installation steps live in `AGENTS.md` (**Adoption & Provenance**), which the AI reads from the repo. In short: the AI vendors the rules into the project once (`docs/mso/AGENTS.md`, matching the project's language) and leaves a three-line reference in the root AI rules file, so every future session reads the local copy instead of re-downloading.
 
-After adoption, have the AI record the source link in your project's AI rules file — see **Adoption & Provenance** in `AGENTS.md` — so future sessions always read the canonical rules.
+If your AI cannot access the web: copy the language-matching rules file into `docs/mso/AGENTS.md` yourself and add the reference block from **Adoption & Provenance** to your root `AGENTS.md`.
 
 ## Directory
 

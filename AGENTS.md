@@ -137,14 +137,20 @@ Process discipline:
 
 ## Adoption & Provenance
 
-When a project adopts MSO, record the provenance at the top of that project's AI rules file (e.g. its `AGENTS.md`):
+This section is the adoption procedure. When a project adopts MSO, execute it once, in order:
+
+1. **Vendor the rules**: copy the rules file matching the project's language (`AGENTS.md` for English projects, `AGENTS.zh-CN.md` for Chinese ones) into the adopting project as `docs/mso/AGENTS.md`
+2. **Reference the local copy**: record the block below at the top of the project's AI rules file (e.g. its `AGENTS.md`):
 
 ```
 Architecture: Model-Self-Organizing Architecture (MSO)
+Local copy: docs/mso/AGENTS.md — read it before any architecture-related design, coding, or review; do not re-fetch from the network
 Source: https://github.com/zly-app/mso-arch (rules as of <commit or date>)
 ```
 
-Rationale: projects drift — as features are added and code is refactored, model boundaries erode and disciplines get bent piece by piece. The recorded source gives every future AI session a fixed baseline to re-check the project's structure against, so the architecture stays what it was adopted to be.
+3. **Read local**: future AI sessions read the local copy — the network is not consulted again.
+
+Rationale: a project runs many AI sessions; re-downloading the rules in each one is slow and network-dependent. The vendored copy is the always-available baseline and the root AI rules file stays thin (three lines). Projects drift — as features are added and code is refactored, model boundaries erode and disciplines get bent piece by piece. The local copy plus recorded source gives every future AI session a fixed reference to re-check the project's structure against, so the architecture stays what it was adopted to be.
 
 ## Diagram Conventions
 

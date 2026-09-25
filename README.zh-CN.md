@@ -148,15 +148,13 @@ sequenceDiagram
 **将以下内容发给你的 AI**：
 
 ```text
-请根据 https://github.com/zly-app/mso-arch
-应用这个架构：阅读其中的 AGENTS.md（模型自组织架构 MSO），
-之后我项目的所有设计、写码、评审都遵循它的规则与评审清单。
+请采用 https://github.com/zly-app/mso-arch 的模型自组织架构（MSO）：
+阅读其 README.md 与 AGENTS.md，并执行 AGENTS.md「采用与溯源」中的安装流程。
 ```
 
-如果你的 AI 不能联网：把仓库里的 `AGENTS.md` 复制进你的代码仓库根目录
-（多数 AI 编码助手会自动读取），或把全文直接贴进对话。
+提示词刻意保持简短——具体安装步骤写在 `AGENTS.md` 的「采用与溯源」里，由 AI 从仓库读取后执行。简述：AI 会把规则一次性复制进项目（`docs/mso/AGENTS.md`，与项目语言一致），并在根 AI 规则文件留下三行引用；此后每个会话读本地副本，不再重复联网下载。
 
-采用后，让 AI 把来源链接记录到项目的 AI 规则文件中——见 `AGENTS.md` 的「采用与溯源」——未来会话就能始终读到权威版规则。
+如果你的 AI 不能联网：手动把与项目语言一致的规则文件复制到 `docs/mso/AGENTS.md`，并按「采用与溯源」把引用块加进根 `AGENTS.md`。
 
 ## 目录
 
