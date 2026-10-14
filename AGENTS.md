@@ -70,7 +70,17 @@ It has no owning model, and the existing disciplines leave it nowhere to go: a s
 
 Scenario: a request passes through Order → Inventory → Notification. If "current user" travels as a parameter, every method in all three layers needs a userId; as a global, three models co-write one state. The right path: the framework carries it down automatically, each model reads via the uniform API. Anti-example: an internal flow cannot read the "visible scope" context, and the code treats "not found" as "no restriction", exporting data it should not export — missing context silently became default-allow.
 
-### 5. Machine checks (CI blocks; review backstops)
+### 5. Notification authority (side-effect notification is emitted where the state changes)
+
+When a model's state changes, **the side-effect events that notify the outside (rendering / audit / downstream subscribers) must be emitted by the model owning that state, at the same place** — mutating the state and emitting the notification are one and the same action; they must not become two independently traversable paths:
+
+- No model / orchestration / shell may mutate state without notifying (downstream never sees it), nor notify without mutating (a false report)
+- When one use case has multiple trigger sources (real user actions, timed grants, debug injections), they must converge on a **single cast entry** — the entry atomically performs "take effect + notify"; new trigger sources call the entry only, and must never re-implement its internal flow
+- State/notification separation can look correct today and still guarantee the silent defect "state changed, notification never sent" the moment the next trigger source appears
+
+Scenario: a ball dropping into a skill slot triggers a skill — the sim, inside the model, mutates state and pushes an event at once; the view consumes the event to play the effect. Correct. Debug code bypassing the sim and mutating state directly → the event stream is empty → the effect never plays. The right fix is not making downstream diff the state, but having the injector emit a synthetic event isomorphic to the sim's — or converging everything on the single cast entry.
+
+### 6. Machine checks (CI blocks; review backstops)
 
 Disciplines enforced only by human review erode — written rules get bypassed and the breach surfaces only after an incident. The machine-checkable subset of the core disciplines must be backed by static checks blocking in CI:
 
@@ -84,7 +94,9 @@ Good: the Order model imports only the Inventory model's public interface file �
 
 Machine checks are necessary but not sufficient: they catch structural violations, not semantic overreach — the review checklist backstops the latter. Items already blocked by CI need not appear on the review checklist.
 
-### 6. Shared-model admission and destination
+**Signature-level refinement for shell/composition root** (plugging the structural hole behind "a thickening shell"): the composition root legitimately imports everything, so dependency-direction checks must allow the shell; but "assembly-type imports" and "cast/orchestration-type calls" can be distinguished and machine-checked via export-naming conventions — e.g. the shell/interface layer must not import model factory/operation exports (`spawn*`/`make*`/`activate*`), only unified entries exposed by the business layer (cast entry, orchestration use cases). Prerequisite: the single cast entry exists first (see §5); land the entry, then the ban — otherwise the check false-positives on legitimate assembly.
+
+### 7. Shared-model admission and destination
 
 The foundation must stay business-agnostic, yet in reality rule-carrying capabilities grow out of business models. Decide **when the second consumer appears**:
 
@@ -93,7 +105,7 @@ The foundation must stay business-agnostic, yet in reality rule-carrying capabil
 
 Scenario: the Order model contains a "spend 100, save 20" discount calculation; the refund flow needs the same calculation — the second consumer has appeared, so the code must move out of the Order model. It carries rules ("who gets which discount"), so it becomes a shared model. A rounding helper carries no business rules — it goes to the foundation.
 
-### 7. Anti-patterns (report on sight during review)
+### 8. Anti-patterns (report on sight during review)
 
 - **God object**: fields and methods of multiple domains share one struct/class; multiple locks share one host
 - **Global god-model**: all domains share one model package; a single change ripples across the repo
@@ -104,6 +116,7 @@ Scenario: the Order model contains a "spend 100, save 20" discount calculation; 
 - **Context threaded through parameters**: adding a parameter to every layer's methods just to pass cross-cutting context, polluting signatures (right path: "Cross-cutting context propagation")
 - **Dedicated big-bang refactor of legacy code**: launching a special project just to "make old code fit the architecture" (right path: "Incremental Adoption" process discipline)
 - **A thickening shell**: business logic growing inside the application shell
+- **State/notification separation**: mutating state and emitting the side-effect notification at different places; an external path (debug injection / compensation task / side tool) mutates state without notifying, leaving downstream consumers silently blind (right path: "Notification authority")
 - **Splitting for its own sake**: a "model" that cannot pass the one-sentence test
 
 ## Review Checklist (self-check when writing or reviewing code)
@@ -119,6 +132,8 @@ Scenario: the Order model contains a "spend 100, save 20" discount calculation; 
 - [ ] Is the termination guarantee a foundation component (or a declared phase mechanism)? No private budget/retry implementations?
 - [ ] Does cross-cutting context travel via foundation implicit propagation + explicit read API? No per-parameter threading? Is the "not found" branch handled?
 - [ ] Does a capability gaining a second consumer go through the admission rule (rules → shared model; pure mechanics → foundation)?
+- [ ] Do new trigger sources of the same use case (real actions / timed grants / debug injections) go through the single cast entry? Any path re-implementing "take effect + notify" outside it?
+- [ ] Are machine checks installed and blocking in CI (or a local gate)? Any cast-type calls in the shell/interface layer bypassing the signature-level ban?
 
 ## Incremental Adoption (legacy systems · behavior-freezing refactor; full test suite green before each next step)
 
@@ -130,6 +145,7 @@ Scenario: the Order model contains a "spend 100, save 20" discount calculation; 
 | 3 Promote to real packages | Promote file groups to independent packages | Models on a cycle merge into one package or cut the cycle with an interface; independent commits per aggregate |
 
 Process discipline:
+- A red baseline gets fixed first: when legacy tests fail, fix them green (or record an exemption list) before starting; during migration the exemption list may only shrink — otherwise "full suite green at each step" is undecidable
 - Guard against over-splitting: **measure first, then split** — line counts and responsibilities decide; record reasons for anything left unsplit
 - Unstructured legacy (no layering, large flat files): contracts first; group files only when a requirement naturally touches them — never launch a dedicated refactor just to "fit the architecture"
 - Test files travel with their source in big file reorganizations; run the full gate (vet/test/fmt/frontend tests) at every step
@@ -149,6 +165,7 @@ Source: https://github.com/zly-app/mso-arch (rules as of <commit or date>)
 ```
 
 3. **Read local**: future AI sessions read the local copy — the network is not consulted again.
+4. **Install machine checks (same adoption, never deferred)**: per §6, land the minimal set — a static import-direction check wired into CI or a local gate script; once the single cast entry exists, add the shell/interface-layer cast ban. The rules demand machine checks, so the adoption procedure must deliver them — vendoring docs without installing checks means the disciplines rest on human eyes alone, and human eyes erode.
 
 Rationale: a project runs many AI sessions; re-downloading the rules in each one is slow and network-dependent. The vendored copy is the always-available baseline and the root AI rules file stays thin (three lines). Projects drift — as features are added and code is refactored, model boundaries erode and disciplines get bent piece by piece. The local copy plus recorded source gives every future AI session a fixed reference to re-check the project's structure against, so the architecture stays what it was adopted to be.
 
